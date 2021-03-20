@@ -16,13 +16,13 @@ bgImage.onload = function() {
 };
 bgImage.src = "images/background.png";
 
-// Hero image
-var heroReady = false;
-var heroImage = new Image();
-heroImage.onload = function() {
-    heroReady = true;
+// Moon image
+var moonReady = false;
+var moonImage = new Image();
+moonImage.onload = function() {
+    moonReady = true;
 };
-heroImage.src = "images/hero.png";
+moonImage.src = "images/moon.png";
 
 // Monster image
 var monsterReady = false;
@@ -67,7 +67,7 @@ var render = function() {
     /* ------------------------------------------------------------------ */
 
     // Game objects
-    var hero = {
+    var moon = {
         speed: 256, // movement in pixels per second
         x: 0, // where on the canvas are they?
         y: 0 // where on the canvas are they?
@@ -86,8 +86,8 @@ var render = function() {
 
     // Reset the game when the player catches a monster
     var reset = function() {
-        hero.x = canvas.width / 2;
-        hero.y = canvas.height / 2;
+        moon.x = canvas.width / 2;
+        moon.y = canvas.height / 2;
 
         //Place the monster somewhere on the screen randomly
         // but not in the hedges, Article in wrong, the 64 needs to be 
@@ -100,8 +100,8 @@ var render = function() {
 
     /* ------------------------------------------------------------------ */
 
-    if (heroReady) {
-        ctx.drawImage(heroImage, hero.x, hero.y);
+    if (moonReady) {
+        ctx.drawImage(moonImage, moon.x, moon.y);
     }
 
     if (monsterReady) {
@@ -139,16 +139,16 @@ var render = function() {
     // Update game objects
     var update = function(modifier) {
         if (38 in keysDown) { // Player holding up
-            hero.y -= hero.speed * modifier;
+            moon.y -= moon.speed * modifier;
         }
         if (40 in keysDown) { // Player holding down
-            hero.y += hero.speed * modifier;
+            moon.y += moon.speed * modifier;
         }
         if (37 in keysDown) { // Player holding left
-            hero.x -= hero.speed * modifier;
+            moon.x -= moon.speed * modifier;
         }
         if (39 in keysDown) { // Player holding right
-            hero.x += hero.speed * modifier;
+            moon.x += moon.speed * modifier;
         }
     };
 
@@ -175,10 +175,10 @@ var render = function() {
 
     // Are they touching?
     if (
-        hero.x <= (monster.x + 32) &&
-        monster.x <= (hero.x + 32) &&
-        hero.y <= (monster.y + 32) &&
-        monster.y <= (hero.y + 32)
+        moon.x <= (monster.x + 32) &&
+        monster.x <= (moon.x + 32) &&
+        moon.y <= (monster.y + 32) &&
+        monster.y <= (moon.y + 32)
     ) {
         ++monstersCaught; // keep track of our “score”
         reset(); // start a new cycle
@@ -198,16 +198,16 @@ var render = function() {
     /* ------------------------------------------------------------------ */
 
 
-    if (38 in keysDown && hero.y > 32 + 4) { //  holding up key
-        hero.y -= hero.speed * modifier;
+    if (38 in keysDown && moon.y > 32 + 4) { //  holding up key
+        moon.y -= moon.speed * modifier;
     }
-    if (40 in keysDown && hero.y < canvas.height - (64 + 6)) { //  holding down key
-        hero.y += hero.speed * modifier;
+    if (40 in keysDown && moon.y < canvas.height - (64 + 6)) { //  holding down key
+        moon.y += moon.speed * modifier;
     }
-    if (37 in keysDown && hero.x > (32 + 4)) { // holding left key
-        hero.x -= hero.speed * modifier;
+    if (37 in keysDown && moon.x > (32 + 4)) { // holding left key
+        moon.x -= moon.speed * modifier;
     }
-    if (39 in keysDown && hero.x < canvas.width - (64 + 6)) { // holding right key
-        hero.x += hero.speed * modifier;
+    if (39 in keysDown && moon.x < canvas.width - (64 + 6)) { // holding right key
+        moon.x += moon.speed * modifier;
     }
 }
