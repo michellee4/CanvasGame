@@ -22,15 +22,15 @@ var moonImage = new Image();
 moonImage.onload = function() {
     moonReady = true;
 };
-moonImage.src = "images/moon.png";
+moonImage.src = "images/moon.jpg";
 
 // Monster image
-var monsterReady = false;
-var monsterImage = new Image();
-monsterImage.onload = function() {
-    monsterReady = true;
+var shipReady = false;
+var shipImage = new Image();
+shipImage.onload = function() {
+    shipReady = true;
 };
-monsterImage.src = "images/monster.png";
+shipImage.src = "images/ship.png";
 
 
 /* ------------------------------------------------------------------ */
@@ -72,12 +72,12 @@ var render = function() {
         x: 0, // where on the canvas are they?
         y: 0 // where on the canvas are they?
     };
-    var monster = {
+    var ship = {
         // for this version, the monster does not move, so just and x and y
         x: 0,
         y: 0
     };
-    var monstersCaught = 0;
+    var shipCaught = 0;
 
 
 
@@ -92,8 +92,8 @@ var render = function() {
         //Place the monster somewhere on the screen randomly
         // but not in the hedges, Article in wrong, the 64 needs to be 
         // hedge 32 + hedge 32 + char 32 = 96
-        monster.x = 32 + (Math.random() * (canvas.width - 96));
-        monster.y = 32 + (Math.random() * (canvas.height - 96));
+        ship.x = 32 + (Math.random() * (canvas.width - 96));
+        ship.y = 32 + (Math.random() * (canvas.height - 96));
     };
 
 
@@ -104,8 +104,8 @@ var render = function() {
         ctx.drawImage(moonImage, moon.x, moon.y);
     }
 
-    if (monsterReady) {
-        ctx.drawImage(monsterImage, monster.x, monster.y);
+    if (shipReady) {
+        ctx.drawImage(shipImage, ship.x, ship.y);
     }
 
 
@@ -175,12 +175,12 @@ var render = function() {
 
     // Are they touching?
     if (
-        moon.x <= (monster.x + 32) &&
-        monster.x <= (moon.x + 32) &&
-        moon.y <= (monster.y + 32) &&
-        monster.y <= (moon.y + 32)
+        moon.x <= (ship.x + 32) &&
+        ship.x <= (moon.x + 32) &&
+        moon.y <= (ship.y + 32) &&
+        ship.y <= (moon.y + 32)
     ) {
-        ++monstersCaught; // keep track of our “score”
+        ++shipCaught; // keep track of our “score”
         reset(); // start a new cycle
     }
 
@@ -192,7 +192,7 @@ var render = function() {
     ctx.font = "24px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
+    ctx.fillText("Goblins caught: " + shipCaught, 32, 32);
 
 
     /* ------------------------------------------------------------------ */
