@@ -192,7 +192,7 @@ var render = function() {
     ctx.font = "24px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Goblins caught: " + shipCaught, 32, 32);
+    ctx.fillText("Moon hit: " + shipCaught, 32, 32);
 
 
     /* ------------------------------------------------------------------ */
