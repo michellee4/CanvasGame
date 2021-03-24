@@ -1,8 +1,14 @@
 // Create the canvas
-var canvas = document.createElement("canvas");
+/* var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
 canvas.width = 512;
 canvas.height = 480;
+document.body.appendChild(canvas); */
+
+var canvas = document.createElement("canvas");
+var ctx = canvas.getContext("2d");
+canvas.width = 600;
+canvas.height = 600;
 document.body.appendChild(canvas);
 
 
@@ -16,15 +22,7 @@ bgImage.onload = function() {
 };
 bgImage.src = "images/background.png";
 
-// Moon image
-var moonReady = false;
-var moonImage = new Image();
-moonImage.onload = function() {
-    moonReady = true;
-};
-moonImage.src = "images/moon.jpg";
-
-// Monster image
+// Ship image
 var shipReady = false;
 var shipImage = new Image();
 shipImage.onload = function() {
@@ -32,8 +30,152 @@ shipImage.onload = function() {
 };
 shipImage.src = "images/ship.png";
 
+// Moon image
+var moonReady = false;
+var moonImage = new Image();
+moonImage.onload = function() {
+    moonReady = true;
+};
+moonImage.src = "images/moon.png";
 
-/* ------------------------------------------------------------------ */
+
+//=================================
+
+// Game objects
+var ship = {    
+    speed: 256, // movement in pixels per second    
+    x: 0,  // where on the canvas are they?    
+    y: 0  // where on the canvas are they?
+};
+
+var moon = {
+    // for this version, the monster does not move, so just and x and y    
+    x: 0,    
+    y: 0
+};
+var moonsLanded = 0;
+
+// Handle keyboard controls
+var keysDown = {}; //object were we properties when keys go down                
+// and then delete them when the key goes up
+// so the object tells us if any key is down when that keycode
+// is down.  In our game loop, we will move the ship image if when
+// we go thru render, a key is down
+
+addEventListener("keydown", function (e) {    
+    //console.log(e.keyCode + " down")    
+    keysDown[e.keyCode] = true;
+}, false);
+
+addEventListener("keyup", function (e) {    
+    //console.log(e.keyCode + " up")    
+    delete keysDown[e.keyCode];
+}, false);
+
+// Update game objects
+var update = function (modifier) {    
+    /*  if (38 in keysDown) { // Player holding up        
+         hero.y -= hero.speed * modifier;    
+     }    
+     if (40 in keysDown) { // Player holding down        
+         hero.y += hero.speed * modifier;    
+     }    
+     if (37 in keysDown) { // Player holding left        
+         hero.x -= hero.speed * modifier;    
+     }    
+     if (39 in keysDown) { // Player holding right        
+         hero.x += hero.speed * modifier;    
+     }*/
+     if (38 in keysDown && ship.y > 32+4) { //  holding up key    
+         ship.y -= ship.speed * modifier;
+     }
+     if (40 in keysDown && ship.y < canvas.height - (64 + 6)) { //  holding down key    
+         ship.y += ship.speed * modifier;
+     }
+     if (37 in keysDown && ship.x > (32+4)) { // holding left key    
+         ship.x -= ship.speed * modifier;
+     }
+     if (39 in keysDown && ship.x < canvas.width - (64 + 6)) { // holding right key    
+         ship.x += ship.speed * modifier;
+     }
+
+
+    // Are they touching?    
+    if (        
+        ship.x <= (moon.x + 32)        
+        && moon.x <= (ship.x + 32)        
+        && ship.y <= (moon.y + 32)        
+        && moon.y <= (ship.y + 32)    
+    ) {        
+        ++moonsLanded;       // keep track of our “score”        
+        reset();       // start a new cycle    
+    }
+};
+
+//=================================
+
+// Function definitions
+
+//Draw everything in the main render function
+var render = function () {
+    if (bgReady) {
+        //console.log('here2');      
+        ctx.drawImage(bgImage, 0, 0);  
+    }
+    
+    if (shipReady) {        
+        ctx.drawImage(shipImage, ship.x, ship.y);    
+    }    
+    
+    if (moonReady) {        
+        ctx.drawImage(moonImage, moon.x, moon.y);    
+    }
+
+      // Score    
+      ctx.fillStyle = "rgb(0, 0, 100)";
+      ctx.font = "24px Helvetica";    
+      ctx.textAlign = "left";    
+      ctx.textBaseline = "top";    
+      ctx.fillText("Moons landed: " + moonsLanded, 32, 32);
+
+}
+// Reset the game when the player catches a monster or game starts
+var reset = function () {    
+    ship.x = canvas.width / 2;    
+    ship.y = canvas.height / 2;
+    
+    //Place the moon somewhere on the screen randomly
+    // but not in the hedges, Article in wrong, the 64 needs to be 
+    // hedge 32 + hedge 32 + char 32 = 96    
+    moon.x = 32 + (Math.random() * (canvas.width - 96));    
+    moon.y = 32 + (Math.random() * (canvas.height - 96));
+};
+
+// The main game loop
+var main = function () {    
+    var now = Date.now();    
+    var delta = now - then;    
+    update(delta / 1000);    
+    render();    
+    then = now;    
+    //  Request to do this again ASAP    
+    requestAnimationFrame(main);
+};
+
+// Let's play this game!
+var then = Date.now();
+reset();
+main();  // call the main game loop.
+
+//========================================
+
+    
+
+
+/* 
+
+
+/* ------------------------------------------------------------------ 
 
 // Let's play this game!
 var then = Date.now();
@@ -55,7 +197,7 @@ var main = function() {
 
 
 
-/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ 
 
 
 // Draw everything in the main render function
@@ -64,7 +206,7 @@ var render = function() {
         console.log('here2');
         ctx.drawImage(bgImage, 0, 0);
     }
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
     // Game objects
     var moon = {
@@ -81,7 +223,7 @@ var render = function() {
 
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
 
     // Reset the game when the player catches a monster
@@ -98,7 +240,7 @@ var render = function() {
 
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
     if (moonReady) {
         ctx.drawImage(moonImage, moon.x, moon.y);
@@ -110,7 +252,7 @@ var render = function() {
 
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
 
 
@@ -134,7 +276,7 @@ var render = function() {
 
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
     // Update game objects
     var update = function(modifier) {
@@ -153,7 +295,7 @@ var render = function() {
     };
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
 
 
@@ -169,7 +311,7 @@ var render = function() {
     };
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
 
 
@@ -185,7 +327,7 @@ var render = function() {
     }
 
 
-    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ 
 
     // Score
     ctx.fillStyle = "rgb(250, 250, 250)";
@@ -195,7 +337,7 @@ var render = function() {
     ctx.fillText("Moon hit: " + shipCaught, 32, 32);
 
 
-    /* ------------------------------------------------------------------ */
+     ------------------------------------------------------------------ 
 
 
     if (38 in keysDown && moon.y > 32 + 4) { //  holding up key
@@ -210,4 +352,4 @@ var render = function() {
     if (39 in keysDown && moon.x < canvas.width - (64 + 6)) { // holding right key
         moon.x += moon.speed * modifier;
     }
-}
+} */
