@@ -38,6 +38,14 @@ moonImage.onload = function() {
 };
 moonImage.src = "images/moon.png";
 
+//Asteroid Image
+var asteroidReady = false;
+var asteroidImage = new Image();
+asteroidImage.onload = function()
+{
+asteroidReady = true;
+};
+asteroidImage.src = "images/asteroid.png";
 
 //=================================
 
@@ -54,6 +62,36 @@ var moon = {
     y: 0
 };
 var moonsLanded = 0;
+
+var asteroid1 =
+{
+   x:564,
+   y:533
+}
+ 
+var asteroid2 =
+{
+   x:95,
+   y:436
+}
+ 
+var asteroid3 =
+{
+   x:109,
+   y:190
+}
+ 
+var asteroid4 =
+{
+   x:375,
+   y:320
+}
+ 
+var asteroid5 =
+{
+   x:423,
+   y:95
+}
 
 // Handle keyboard controls
 var keysDown = {}; //object were we properties when keys go down                
@@ -110,6 +148,56 @@ var update = function (modifier) {
         ++moonsLanded;       // keep track of our “score”        
         reset();       // start a new cycle    
     }
+
+    function touchingAsteroid(who)
+    {
+        if(
+            (who.x <= (asteroid1.x + 64)
+                && asteroid1.x <= (who.x + 32)
+                && who.y <= (asteroid1.y + 64)
+                && asteroid1.y <= (who.y + 32)) ||
+            (who.x <= (asteroid2.x + 64)
+                && asteroid2.x <= (who.x + 32)
+                && who.y <= (asteroid2.y + 64)
+                && asteroid2.y <= (who.y + 32)) ||
+            (who.x <= (asteroid3.x + 64)
+                && asteroid3.x <= (who.x + 32)
+                && who.y <= (asteroid3.y + 64)
+                && asteroid3.y <= (who.y + 32)) ||
+            (who.x <= (asteroid4.x + 64)
+                && asteroid4.x <= (who.x + 32)
+                && who.y <= (asteroid4.y + 64)
+                && asteroid4.y <= (who.y + 32)) ||
+            (who.x <= (asteroid5.x + 64)
+                && asteroid5.x <= (who.x + 32)
+                && who.y <= (asteroid5.y + 64)
+                && asteroid5.y <= (who.y + 32))
+        )
+        {
+            return true;
+        }
+    }
+
+
+   if (touchingAsteroid(ship))
+   {
+       alert("Oh no! You ship was hit by an asteroid. Game Over")
+       gameOver = true;
+   }
+ 
+   let notGood = false;
+   while(notGood)
+   {
+       moon.x = 32 + (Math.random() * (canvas.width - 96));
+       moon.y = 32 + (Math.random() * (canvas.width - 96));
+ 
+       if(touchingAsteroid(moon))
+       {
+           notGood = true;
+       }
+   }
+
+
 };
 
 //=================================
@@ -131,6 +219,16 @@ var render = function () {
         ctx.drawImage(moonImage, moon.x, moon.y);    
     }
 
+    if (asteroidReady)
+    {
+        ctx.drawImage(asteroidImage, asteroid1.x, asteroid1.y);
+        ctx.drawImage(asteroidImage, asteroid2.x, asteroid2.y);
+        ctx.drawImage(asteroidImage, asteroid3.x, asteroid3.y);
+        ctx.drawImage(asteroidImage, asteroid4.x, asteroid4.y);
+        ctx.drawImage(asteroidImage, asteroid5.x, asteroid5.y);
+    }
+
+
       // Score    
       ctx.fillStyle = "rgb(0, 0, 100)";
       ctx.font = "24px Helvetica";    
@@ -150,6 +248,8 @@ var reset = function () {
     moon.x = 32 + (Math.random() * (canvas.width - 96));    
     moon.y = 32 + (Math.random() * (canvas.height - 96));
 };
+
+
 
 // The main game loop
 var main = function () {    
