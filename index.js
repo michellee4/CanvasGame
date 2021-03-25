@@ -41,57 +41,59 @@ moonImage.src = "images/moon.png";
 //Asteroid Image
 var asteroidReady = false;
 var asteroidImage = new Image();
-asteroidImage.onload = function()
-{
-asteroidReady = true;
+asteroidImage.onload = function() {
+    asteroidReady = true;
 };
 asteroidImage.src = "images/asteroid.png";
 
+
+
 //=================================
 
+
+
 // Game objects
-var ship = {    
+var ship = {
     speed: 256, // movement in pixels per second    
-    x: 0,  // where on the canvas are they?    
-    y: 0  // where on the canvas are they?
+    x: 0, // where on the canvas are they?    
+    y: 0 // where on the canvas are they?
 };
 
 var moon = {
     // for this version, the monster does not move, so just and x and y    
-    x: 0,    
+    x: 0,
     y: 0
 };
 var moonsLanded = 0;
 
-var asteroid1 =
-{
-   x:564,
-   y:533
+var asteroid1 = {
+    x: 564,
+    y: 533
 }
- 
-var asteroid2 =
-{
-   x:95,
-   y:436
+
+var asteroid2 = {
+    x: 95,
+    y: 436
 }
- 
-var asteroid3 =
-{
-   x:109,
-   y:190
+
+var asteroid3 = {
+    x: 109,
+    y: 190
 }
- 
-var asteroid4 =
-{
-   x:375,
-   y:320
+
+var asteroid4 = {
+    x: 375,
+    y: 320
 }
- 
-var asteroid5 =
-{
-   x:423,
-   y:95
+
+var asteroid5 = {
+    x: 423,
+    y: 95
 }
+
+//sound
+var audio = new Audio('../sound/shipx.mp3');
+
 
 // Handle keyboard controls
 var keysDown = {}; //object were we properties when keys go down                
@@ -100,18 +102,18 @@ var keysDown = {}; //object were we properties when keys go down
 // is down.  In our game loop, we will move the ship image if when
 // we go thru render, a key is down
 
-addEventListener("keydown", function (e) {    
+addEventListener("keydown", function(e) {
     //console.log(e.keyCode + " down")    
     keysDown[e.keyCode] = true;
 }, false);
 
-addEventListener("keyup", function (e) {    
+addEventListener("keyup", function(e) {
     //console.log(e.keyCode + " up")    
     delete keysDown[e.keyCode];
 }, false);
 
 // Update game objects
-var update = function (modifier) {    
+var update = function(modifier) {
     /*  if (38 in keysDown) { // Player holding up        
          hero.y -= hero.speed * modifier;    
      }    
@@ -124,78 +126,81 @@ var update = function (modifier) {
      if (39 in keysDown) { // Player holding right        
          hero.x += hero.speed * modifier;    
      }*/
-     if (38 in keysDown && ship.y > 32+4) { //  holding up key    
-         ship.y -= ship.speed * modifier;
-     }
-     if (40 in keysDown && ship.y < canvas.height - (64 + 6)) { //  holding down key    
-         ship.y += ship.speed * modifier;
-     }
-     if (37 in keysDown && ship.x > (32+4)) { // holding left key    
-         ship.x -= ship.speed * modifier;
-     }
-     if (39 in keysDown && ship.x < canvas.width - (64 + 6)) { // holding right key    
-         ship.x += ship.speed * modifier;
-     }
+    if (38 in keysDown && ship.y > 32 + 4) { //  holding up key    
+        ship.y -= ship.speed * modifier;
+    }
+    if (40 in keysDown && ship.y < canvas.height - (64 + 6)) { //  holding down key    
+        ship.y += ship.speed * modifier;
+    }
+    if (37 in keysDown && ship.x > (32 + 4)) { // holding left key    
+        ship.x -= ship.speed * modifier;
+    }
+    if (39 in keysDown && ship.x < canvas.width - (64 + 6)) { // holding right key    
+        ship.x += ship.speed * modifier;
+    }
 
 
     // Are they touching?    
-    if (        
-        ship.x <= (moon.x + 32)        
-        && moon.x <= (ship.x + 32)        
-        && ship.y <= (moon.y + 32)        
-        && moon.y <= (ship.y + 32)    
-    ) {        
-        ++moonsLanded;       // keep track of our “score”        
-        reset();       // start a new cycle    
+    if (
+        ship.x <= (moon.x + 32) &&
+        moon.x <= (ship.x + 32) &&
+        ship.y <= (moon.y + 32) &&
+        moon.y <= (ship.y + 32)
+    ) {
+        ++moonsLanded; // keep track of our “score”        
+        reset(); // start a new cycle    
     }
 
-    function touchingAsteroid(who)
-    {
-        if(
-            (who.x <= (asteroid1.x + 64)
-                && asteroid1.x <= (who.x + 32)
-                && who.y <= (asteroid1.y + 64)
-                && asteroid1.y <= (who.y + 32)) ||
-            (who.x <= (asteroid2.x + 64)
-                && asteroid2.x <= (who.x + 32)
-                && who.y <= (asteroid2.y + 64)
-                && asteroid2.y <= (who.y + 32)) ||
-            (who.x <= (asteroid3.x + 64)
-                && asteroid3.x <= (who.x + 32)
-                && who.y <= (asteroid3.y + 64)
-                && asteroid3.y <= (who.y + 32)) ||
-            (who.x <= (asteroid4.x + 64)
-                && asteroid4.x <= (who.x + 32)
-                && who.y <= (asteroid4.y + 64)
-                && asteroid4.y <= (who.y + 32)) ||
-            (who.x <= (asteroid5.x + 64)
-                && asteroid5.x <= (who.x + 32)
-                && who.y <= (asteroid5.y + 64)
-                && asteroid5.y <= (who.y + 32))
-        )
-        {
+    function touchingAsteroid(who) {
+        if (
+            (who.x <= (asteroid1.x + 64) &&
+                asteroid1.x <= (who.x + 32) &&
+                who.y <= (asteroid1.y + 64) &&
+                asteroid1.y <= (who.y + 32)) ||
+            (who.x <= (asteroid2.x + 64) &&
+                asteroid2.x <= (who.x + 32) &&
+                who.y <= (asteroid2.y + 64) &&
+                asteroid2.y <= (who.y + 32)) ||
+            (who.x <= (asteroid3.x + 64) &&
+                asteroid3.x <= (who.x + 32) &&
+                who.y <= (asteroid3.y + 64) &&
+                asteroid3.y <= (who.y + 32)) ||
+            (who.x <= (asteroid4.x + 64) &&
+                asteroid4.x <= (who.x + 32) &&
+                who.y <= (asteroid4.y + 64) &&
+                asteroid4.y <= (who.y + 32)) ||
+            (who.x <= (asteroid5.x + 64) &&
+                asteroid5.x <= (who.x + 32) &&
+                who.y <= (asteroid5.y + 64) &&
+                asteroid5.y <= (who.y + 32))
+        ) {
             return true;
+
         }
     }
 
 
-   if (touchingAsteroid(ship))
-   {
-       alert("Oh no! You ship was hit by an asteroid. Game Over")
-       gameOver = true;
-   }
- 
-   let notGood = false;
-   while(notGood)
-   {
-       moon.x = 32 + (Math.random() * (canvas.width - 96));
-       moon.y = 32 + (Math.random() * (canvas.width - 96));
- 
-       if(touchingAsteroid(moon))
-       {
-           notGood = true;
-       }
-   }
+
+    if (touchingAsteroid(ship)) {
+
+        alert("Oh no! You ship was hit by an asteroid. Game Over")
+
+        audio.play();
+        gameOver = true;
+
+    }
+
+
+
+    let notGood = false;
+    while (notGood) {
+        moon.x = 32 + (Math.random() * (canvas.width - 96));
+        moon.y = 32 + (Math.random() * (canvas.width - 96));
+
+        if (touchingAsteroid(moon)) {
+            notGood = true;
+        }
+    }
 
 
 };
@@ -205,59 +210,58 @@ var update = function (modifier) {
 // Function definitions
 
 //Draw everything in the main render function
-var render = function () {
-    if (bgReady) {
-        //console.log('here2');      
-        ctx.drawImage(bgImage, 0, 0);  
+var render = function() {
+        if (bgReady) {
+            //console.log('here2');      
+            ctx.drawImage(bgImage, 0, 0);
+        }
+
+        if (shipReady) {
+            ctx.drawImage(shipImage, ship.x, ship.y);
+        }
+
+        if (moonReady) {
+            ctx.drawImage(moonImage, moon.x, moon.y);
+        }
+
+        if (asteroidReady) {
+            ctx.drawImage(asteroidImage, asteroid1.x, asteroid1.y);
+            ctx.drawImage(asteroidImage, asteroid2.x, asteroid2.y);
+            ctx.drawImage(asteroidImage, asteroid3.x, asteroid3.y);
+            ctx.drawImage(asteroidImage, asteroid4.x, asteroid4.y);
+            ctx.drawImage(asteroidImage, asteroid5.x, asteroid5.y);
+        }
+
+
+        // Score    
+        ctx.fillStyle = "rgb(0, 0, 100)";
+        ctx.font = "24px Helvetica";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("Moons landed: " + moonsLanded, 32, 32);
+
     }
-    
-    if (shipReady) {        
-        ctx.drawImage(shipImage, ship.x, ship.y);    
-    }    
-    
-    if (moonReady) {        
-        ctx.drawImage(moonImage, moon.x, moon.y);    
-    }
-
-    if (asteroidReady)
-    {
-        ctx.drawImage(asteroidImage, asteroid1.x, asteroid1.y);
-        ctx.drawImage(asteroidImage, asteroid2.x, asteroid2.y);
-        ctx.drawImage(asteroidImage, asteroid3.x, asteroid3.y);
-        ctx.drawImage(asteroidImage, asteroid4.x, asteroid4.y);
-        ctx.drawImage(asteroidImage, asteroid5.x, asteroid5.y);
-    }
-
-
-      // Score    
-      ctx.fillStyle = "rgb(0, 0, 100)";
-      ctx.font = "24px Helvetica";    
-      ctx.textAlign = "left";    
-      ctx.textBaseline = "top";    
-      ctx.fillText("Moons landed: " + moonsLanded, 32, 32);
-
-}
-// Reset the game when the player catches a monster or game starts
-var reset = function () {    
-    ship.x = canvas.width / 2;    
+    // Reset the game when the player catches a monster or game starts
+var reset = function() {
+    ship.x = canvas.width / 2;
     ship.y = canvas.height / 2;
-    
+
     //Place the moon somewhere on the screen randomly
     // but not in the hedges, Article in wrong, the 64 needs to be 
     // hedge 32 + hedge 32 + char 32 = 96    
-    moon.x = 32 + (Math.random() * (canvas.width - 96));    
+    moon.x = 32 + (Math.random() * (canvas.width - 96));
     moon.y = 32 + (Math.random() * (canvas.height - 96));
 };
 
 
 
 // The main game loop
-var main = function () {    
-    var now = Date.now();    
-    var delta = now - then;    
-    update(delta / 1000);    
-    render();    
-    then = now;    
+var main = function() {
+    var now = Date.now();
+    var delta = now - then;
+    update(delta / 1000);
+    render();
+    then = now;
     //  Request to do this again ASAP    
     requestAnimationFrame(main);
 };
@@ -265,11 +269,11 @@ var main = function () {
 // Let's play this game!
 var then = Date.now();
 reset();
-main();  // call the main game loop.
+main(); // call the main game loop.
 
 //========================================
 
-    
+
 
 
 /* 
