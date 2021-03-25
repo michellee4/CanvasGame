@@ -92,6 +92,12 @@ var asteroid5 = {
 }
 
 
+var audioElement = new Audio('sound/shipx.mp3');
+audioElement.addEventListener('loadeddata', () => {
+    let duration = audioElement.duration;
+    // The duration variable now holds the duration (in seconds) of the audio clip
+})
+
 
 // Handle keyboard controls
 var keysDown = {}; //object were we properties when keys go down                
@@ -185,8 +191,6 @@ var update = function(modifier) {
 
 
         //sound
-        var shipCrash = createAudio('../sound/shipx.mp3');
-        shipCrash.play();
         gameOver = true;
 
     }
