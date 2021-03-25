@@ -38,6 +38,15 @@ moonImage.onload = function() {
 };
 moonImage.src = "images/moon.png";
 
+// Planet image
+var planetReady = false;
+var planetImage = new Image();
+planetImage.onload = function() {
+    planetReady = true;
+};
+planetImage.src = "images/planet.png";
+
+
 //Asteroid Image
 var asteroidReady = false;
 var asteroidImage = new Image();
@@ -61,6 +70,12 @@ var ship = {
 
 var moon = {
     // for this version, the monster does not move, so just and x and y    
+    x: 0,
+    y: 0
+};
+
+var planet = {
+
     x: 0,
     y: 0
 };
@@ -91,12 +106,6 @@ var asteroid5 = {
     y: 95
 }
 
-
-var audioElement = new Audio('sound/shipx.mp3');
-audioElement.addEventListener('loadeddata', () => {
-    let duration = audioElement.duration;
-    // The duration variable now holds the duration (in seconds) of the audio clip
-})
 
 
 // Handle keyboard controls
@@ -155,6 +164,16 @@ var update = function(modifier) {
         reset(); // start a new cycle    
     }
 
+    if (
+        ship.x <= (planet.x + 32) &&
+        planet.x <= (ship.x + 32) &&
+        ship.y <= (planet.y + 32) &&
+        planet.y <= (ship.y + 32)
+    ) {
+        ++moonsLanded; // keep track of our “score”        
+        reset(); // start a new cycle    
+    }
+
     function touchingAsteroid(who) {
         if (
             (who.x <= (asteroid1.x + 64) &&
@@ -187,10 +206,7 @@ var update = function(modifier) {
 
     if (touchingAsteroid(ship)) {
 
-        alert("Oh no! You ship was hit by an asteroid. Game Over")
-
-
-        //sound
+        alert("Oh no! Your ship was hit by an asteroid. Game Over")
         gameOver = true;
 
     }
@@ -201,11 +217,15 @@ var update = function(modifier) {
     while (notGood) {
         moon.x = 32 + (Math.random() * (canvas.width - 96));
         moon.y = 32 + (Math.random() * (canvas.width - 96));
+        planet.x = 32 + (Math.random() * (canvas.width - 96));
+        planet.y = 32 + (Math.random() * (canvas.width - 96));
 
-        if (touchingAsteroid(moon)) {
+        if (touchingAsteroid(moon) || touchingAsteroid(planet)) {
             notGood = true;
         }
     }
+
+
 
 
 };
@@ -227,6 +247,10 @@ var render = function() {
 
         if (moonReady) {
             ctx.drawImage(moonImage, moon.x, moon.y);
+        }
+
+        if (planetReady){
+            ctx.drawImage(planetImage, planet.x, planet.y);
         }
 
         if (asteroidReady) {
@@ -256,6 +280,9 @@ var reset = function() {
     // hedge 32 + hedge 32 + char 32 = 96    
     moon.x = 32 + (Math.random() * (canvas.width - 96));
     moon.y = 32 + (Math.random() * (canvas.height - 96));
+    planet.x = 32 + (Math.random() * (canvas.width - 96));
+    planet.y = 32 + (Math.random() * (canvas.height - 96));
+
 };
 
 
