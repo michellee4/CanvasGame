@@ -267,7 +267,7 @@ var render = function() {
         ctx.font = "24px Helvetica";
         ctx.textAlign = "left";
         ctx.textBaseline = "top";
-        ctx.fillText("Moons landed: " + moonsLanded, 32, 32);
+        ctx.fillText("Landed: " + moonsLanded, 32, 32);
 
     }
     // Reset the game when the player catches a monster or game starts
