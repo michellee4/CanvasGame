@@ -91,8 +91,6 @@ var asteroid5 = {
     y: 95
 }
 
-//sound
-var audio = new Audio('../sound/shipx.mp3');
 
 
 // Handle keyboard controls
@@ -185,7 +183,10 @@ var update = function(modifier) {
 
         alert("Oh no! You ship was hit by an asteroid. Game Over")
 
-        audio.play();
+
+        //sound
+        var shipCrash = createAudio('../sound/shipx.mp3');
+        shipCrash.play();
         gameOver = true;
 
     }
